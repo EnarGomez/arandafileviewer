@@ -22,12 +22,6 @@ class VideoViewController: UIViewController {
     @IBOutlet weak var imgError: UIImageView!
     @IBOutlet weak var lblError: UILabel!
     
-    // Reference for the player view.
-    private var playerView: PlayerView!
-
-    // URL for the test video.
-    private let videoURL = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-
     var playerContainerView: UIView!
     var isplay: Bool = false
     var color: UIColor = .clear
@@ -87,7 +81,7 @@ class VideoViewController: UIViewController {
     func startVideoFrom() {
         
         let url = Utils.createNewPath(lastPath: self.fileName) 
-        if url != nil {
+        if url.path != "" {
             let player = AVPlayer(url: url)
             let playerViewController = AVPlayerViewController()
             playerViewController.player = player

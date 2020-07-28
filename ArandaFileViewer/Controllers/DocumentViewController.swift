@@ -41,8 +41,6 @@ class DocumentViewController: UIViewController, WKNavigationDelegate, WKUIDelega
     func configureError(){
         view.backgroundColor = .white
         imageView = UIImageView(frame: self.container.frame)
-//        imageView.frame.origin.x = 0
-//        imageView.frame.origin.y = 0
         self.imageView.image = UIImage(named: "iconImageError")
         
         imageView.contentMode = .scaleAspectFit

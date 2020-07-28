@@ -13,7 +13,6 @@
 		6BC5EBC724CF395F00944024 /* Viewer.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6BC5EBB224CF395F00944024 /* Viewer.strings */; };
 		6BC5EBC824CF395F00944024 /* Viewer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6BC5EBB624CF395F00944024 /* Viewer.storyboard */; };
 		6BC5EBC924CF395F00944024 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC5EBBA24CF395F00944024 /* UIImage.swift */; };
-		6BC5EBCA24CF395F00944024 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC5EBBB24CF395F00944024 /* PlayerView.swift */; };
 		6BC5EBCB24CF395F00944024 /* ArandaFileViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC5EBBD24CF395F00944024 /* ArandaFileViewer.swift */; };
 		6BC5EBCC24CF395F00944024 /* Enumerations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC5EBBE24CF395F00944024 /* Enumerations.swift */; };
 		6BC5EBCD24CF395F00944024 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC5EBBF24CF395F00944024 /* Utils.swift */; };
@@ -51,7 +50,6 @@
 		6BC5EBB724CF395F00944024 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Viewer.storyboard; sourceTree = "<group>"; };
 		6BC5EBB824CF395F00944024 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Viewer.strings"; sourceTree = "<group>"; };
 		6BC5EBBA24CF395F00944024 /* UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
-		6BC5EBBB24CF395F00944024 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		6BC5EBBD24CF395F00944024 /* ArandaFileViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArandaFileViewer.swift; sourceTree = "<group>"; };
 		6BC5EBBE24CF395F00944024 /* Enumerations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enumerations.swift; sourceTree = "<group>"; };
 		6BC5EBBF24CF395F00944024 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -149,7 +147,6 @@
 			isa = PBXGroup;
 			children = (
 				6BC5EBBA24CF395F00944024 /* UIImage.swift */,
-				6BC5EBBB24CF395F00944024 /* PlayerView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -303,7 +300,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6BC5EBCA24CF395F00944024 /* PlayerView.swift in Sources */,
 				6BC5EBD124CF395F00944024 /* ImageViewController.swift in Sources */,
 				6BC5EBC924CF395F00944024 /* UIImage.swift in Sources */,
 				6BC5EBCC24CF395F00944024 /* Enumerations.swift in Sources */,
