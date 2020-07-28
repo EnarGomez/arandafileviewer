@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  ArandaFileViewer
+
+  Created by Enar GoMez on 22/07/20.
+  Copyright © 2020 Aranda. All rights reserved.
+*/
+"audio_play" = "Toque";
+"audio_stop" = "Pare";
+
+"Preview_not_available" = "Pré-visualização não disponível.";
+"loading" = "Carregando";
