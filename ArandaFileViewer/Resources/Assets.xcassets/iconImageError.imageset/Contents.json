@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "error1x.png",
+      "filename" : "ico_alerta_g.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "error2x.png",
+      "filename" : "ico_alerta_g-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "error3x.png",
+      "filename" : "ico_alerta_g-2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

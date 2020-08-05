@@ -11,7 +11,7 @@ import Foundation
 import Foundation
 
 
-enum AFVFileType: String{
+public enum AFVFileType: String{
     case Video = "public.movie"
     case Image = "public.image"
     case Audio = "public.audio"

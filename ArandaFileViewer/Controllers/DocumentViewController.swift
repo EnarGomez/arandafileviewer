@@ -13,6 +13,10 @@ import WebKit
 class DocumentViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     
     @IBOutlet weak var container: UIView!
+    @IBOutlet weak var viewContainer: UIView!
+    @IBOutlet weak var lblDocumentName: UILabel!
+    @IBOutlet weak var imgError: UIImageView!
+    @IBOutlet weak var lblError: UILabel!
     
     typealias CompletionHandler = ((_ canShowFile: Bool, _ viewController: DocumentViewController?) -> Void)
     
@@ -23,6 +27,13 @@ class DocumentViewController: UIViewController, WKNavigationDelegate, WKUIDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+       // self.configureView()
+    }
+    
+    private func configureView(){
+        Utils.setRoundedCornesButton(self.viewContainer, color: Utils.hexStringToUIColor(hex: "#f8f8f8"), size: 5)
+        Utils.setRoundedCornesButton(self.container, color: .clear, size: 5)
+        viewContainer.backgroundColor = Utils.hexStringToUIColor(hex: "#f8f8f8")
     }
     
     func configureWebview(){
@@ -39,17 +50,17 @@ class DocumentViewController: UIViewController, WKNavigationDelegate, WKUIDelega
     }
     
     func configureError(){
-        view.backgroundColor = .white
-        imageView = UIImageView(frame: self.container.frame)
-        self.imageView.image = UIImage(named: "iconImageError")
-        
-        imageView.contentMode = .scaleAspectFit
-        imageView.frame.size.width = 200
-        imageView.frame.size.height = 200
-        imageView.center = self.view.center
-        self.container.addSubview(imageView)
-                
+        //view.backgroundColor = .white
+        self.container.backgroundColor = Utils.hexStringToUIColor(hex: "#8b8b8b")
+        self.imgError.isHidden = false
+        self.imgError.image =  UIImage(named: "iconImageError", in: Utils.getBundle(), compatibleWith: nil)
+        self.lblError.isHidden = false
+        self.lblError.textColor = Utils.hexStringToUIColor(hex: "#a7a7a7")
+        self.lblError.text = Utils.stringNamed("Preview_not_available")
     }
+    
+    
+    
     
     func loadRequest(urlToLoad: String){
         let request:URLRequest = URLRequest(url: URL(string: urlToLoad)!)
@@ -57,6 +68,7 @@ class DocumentViewController: UIViewController, WKNavigationDelegate, WKUIDelega
     }
     
     func loadDocument(fileName: String){
+        self.lblDocumentName.text = fileName
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         if paths.count > 0 {
             if let dirPath = paths[0] as String? {
@@ -64,9 +76,7 @@ class DocumentViewController: UIViewController, WKNavigationDelegate, WKUIDelega
                 self.fileURL = URL(fileURLWithPath: dirPath).appendingPathComponent(fileName)
                 if fileManager.fileExists(atPath: self.fileURL.path){
                     self.configureWebview()
-                    //let request:URLRequest = URLRequest(url: url)
                     self.webView.loadFileURL(self.fileURL, allowingReadAccessTo: self.fileURL.deletingLastPathComponent())
-                    //self.webView.load(request)
                 }else{
                     self.configureError()
                 }
@@ -82,6 +92,7 @@ class DocumentViewController: UIViewController, WKNavigationDelegate, WKUIDelega
     func loadDocumentInPath(path: String){
        let fileManager = FileManager.default
        self.fileURL = URL(fileURLWithPath: path)
+       self.lblDocumentName.text = self.fileURL.lastPathComponent
        if fileManager.fileExists(atPath: self.fileURL.path){
            self.configureWebview()
            self.webView.loadFileURL(self.fileURL, allowingReadAccessTo: self.fileURL.deletingLastPathComponent())
@@ -93,6 +104,7 @@ class DocumentViewController: UIViewController, WKNavigationDelegate, WKUIDelega
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.configureView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -101,7 +113,6 @@ class DocumentViewController: UIViewController, WKNavigationDelegate, WKUIDelega
     
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         print("Inicia")
-        //  self.activityIndicator.isHidden = true
     }
     
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {

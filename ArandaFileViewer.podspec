@@ -30,7 +30,7 @@ s.source = { :git => "https://github.com/EnarGomez/arandafileviewer.git",
 s.source_files = "ArandaFileViewer/**/*.{h,m,swift}"
 s.exclude_files = "ArandaFileViewer/*.plist"
 # archivos de recursos
-s.resources = "ArandaFileViewer/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}"
+s.resources = "ArandaFileViewer/**/*.{png,jpeg,jpg,storyboard,xib,xcassets,strings}"
 
 # swift version
 s.swift_version = "5.0"

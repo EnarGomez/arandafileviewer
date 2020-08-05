@@ -10,33 +10,37 @@ import UIKit
 import AVFoundation
 
 class AudioViewController: UIViewController {
-
-    @IBOutlet weak var btnPlay: UIButton!
-    @IBOutlet weak var imgAudio: UIImageView!
-    @IBOutlet weak var lblAudioTime: UILabel!
-    @IBOutlet weak var stackContainer: UIStackView!
     
+    @IBOutlet weak var viewPlayContraintHeight: NSLayoutConstraint!
+    @IBOutlet weak var btnPlay: UIButton!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var viewBtnPlay: UIView!
+    
+    var imgAudio: UIImageView!
+    var lblAudioTime: UILabel!
+    var lblAudioName: UILabel!
+    var viewContainer: UIView!
     
     var isplay: Bool = false
     var color: UIColor = .clear
     var player: AVAudioPlayer!
     var duration = TimeInterval()
     var hasError = false
-    
-    //error view
-    @IBOutlet weak var viewContainerError: UIView!
-    @IBOutlet weak var imgError: UIImageView!
-    @IBOutlet weak var lblError: UILabel!
+    var fileName = ""
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        self.tableView.separatorStyle = .none
+        self.tableView.tableFooterView = UIView(frame: CGRect.zero)
+        self.tableView.separatorStyle = .none
+       
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
     }
     override func viewDidDisappear(_ animated: Bool) {
         if self.isplay {
@@ -47,37 +51,35 @@ class AudioViewController: UIViewController {
     func configure(color:UIColor){
         self.color = color
         self.btnPlay.setTitleColor(color, for: .normal)
-        self.imgAudio.image = UIImage(named: "iconAudio")!.imageWithColor(self.color)
-        self.showInitialView()
+        self.btnPlay.tintColor = color
     }
     
-    private func showInitialView(){
-        self.imgError.image = UIImage(named: "iconAudio")!.imageWithColor(self.color)
-        self.lblError.text = "loading"
-        self.updateView(showError: true)
-    }
-    
-    
-    private func updateView(showError:Bool){
-        if showError{
-            self.stackContainer.isHidden = true
-            self.viewContainerError.isHidden = false
+    private func updateView(){
+        lblAudioName.text = self.fileName
+        Utils.setRoundedCornesButton(self.viewBtnPlay, color: self.color, size: 5)
+        Utils.setRoundedCornesButton(self.viewContainer, color: Utils.hexStringToUIColor(hex: "#f8f8f8"), size: 5)
+        Utils.setRoundedCornesButton(self.imgAudio, color: .clear, size: 5)
+        viewContainer.backgroundColor = Utils.hexStringToUIColor(hex: "#f8f8f8")
+        imgAudio.backgroundColor = Utils.hexStringToUIColor(hex: "#8b8b8b")
+        
+        if self.hasError {
+            self.imgAudio.image = UIImage(named: "iconImageError", in: Utils.getBundle(), compatibleWith: nil)
+            self.lblAudioTime.text = Utils.stringNamed("Preview_not_available")
+            self.viewPlayContraintHeight.constant = 0
         }else{
-            self.stackContainer.isHidden = false
-            self.viewContainerError.isHidden = true
+            self.imgAudio.image = UIImage(named: "iconAudio", in: Utils.getBundle(), compatibleWith: nil)
+            self.lblAudioTime.text = ""
+
+            Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(AudioViewController.progressSong), userInfo: nil, repeats: true)
         }
     }
     
     private func setPlay() {
-        let imgPlay = UIImage(named: "iconPlay")!.imageWithColor(self.color)
         self.btnPlay.setTitle(Utils.stringNamed("audio_play"), for: .normal)
-        self.btnPlay.setImage(imgPlay, for: .normal)
     }
     
     private func setStop() {
-        let imgPlay = UIImage(named: "iconStop")!.imageWithColor(self.color)
         self.btnPlay.setTitle(Utils.stringNamed("audio_stop"), for: .normal)
-        self.btnPlay.setImage(imgPlay, for: .normal)
     }
     
     @IBAction func btnPlayAction(_ sender: Any) {
@@ -94,6 +96,7 @@ class AudioViewController: UIViewController {
     
     func showAudio(fileName: String)
     {
+        self.fileName = fileName
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         if paths.count > 0 {
             if let dirPath = paths[0] as String? {
@@ -102,35 +105,29 @@ class AudioViewController: UIViewController {
                 if fileManager.fileExists(atPath: fileURL.path){
                     self.setupAudioPlayerWithFile(fileURL.path)
                     if !self.hasError {
-                        self.updateView(showError: false)
+                       
                         self.setPlay()
-                        self.lblAudioTime.text = ""
+                       
                         self.duration = self.player.duration
-                        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(AudioViewController.progressSong), userInfo: nil, repeats: true)
                     }else{
-                        self.lblError.text = Utils.stringNamed("Preview_not_available")
-                        self.updateView(showError: true)
+                        self.hasError = true
                     }
                 }else{
-                    self.lblError.text = Utils.stringNamed("Preview_not_available")
-                    self.updateView(showError: true)
+                    self.hasError = true
                 }
             }
             else{
-                self.lblError.text = Utils.stringNamed("Preview_not_available")
-                self.updateView(showError: true)
+                self.hasError = true
             }
         }else{
-            self.lblError.text = Utils.stringNamed("Preview_not_available")
-            self.updateView(showError: true)
+             self.hasError = true
         }
         
         
     }
-
+    
     private func setupAudioPlayerWithFile(_ file:String) {
         let url = URL(fileURLWithPath: file)
-        //var audioPlayer:AVAudioPlayer?
         do {
             self.player = try AVAudioPlayer(contentsOf: url)
             self.player.delegate = self
@@ -138,33 +135,31 @@ class AudioViewController: UIViewController {
         } catch let error as NSError {
             NSLog("Error Audio: \(error)")
             self.hasError = true
-           // audioPlayer = nil
         }
-      //  return audioPlayer ?? nil
     }
     
     @objc private func progressSong()
-       {
-           if self.player.isPlaying
-           {
-               let currentTime:TimeInterval = self.player.currentTime
-               
-               let currentTimeInteger =  NSInteger(currentTime)
-               
-               let seconds = currentTimeInteger % 60
-               let minutes = (currentTimeInteger / 60) % 60
-               let hours = (currentTimeInteger / 3600)
-               
-               let timeAsText = NSString(format: "%0.2d:%0.2d:%0.2d",hours,minutes,seconds)
-               
-               self.lblAudioTime.text = ("\(timeAsText)")
-               
-           }
-           else
-           {
-               return
-           }
-       }
+    {
+        if self.player.isPlaying
+        {
+            let currentTime:TimeInterval = self.player.currentTime
+            
+            let currentTimeInteger =  NSInteger(currentTime)
+            
+            let seconds = currentTimeInteger % 60
+            let minutes = (currentTimeInteger / 60) % 60
+            let hours = (currentTimeInteger / 3600)
+            
+            let timeAsText = NSString(format: "%0.2d:%0.2d:%0.2d",hours,minutes,seconds)
+            
+            self.lblAudioTime.text = ("\(timeAsText)")
+            
+        }
+        else
+        {
+            return
+        }
+    }
     
 }
 
@@ -178,4 +173,34 @@ extension AudioViewController: AVAudioPlayerDelegate {
             self.setPlay()
         }
     }
+}
+
+extension AudioViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 320
+    }
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellImage", for: indexPath)
+        self.viewContainer = cell.viewWithTag(1)
+        self.lblAudioTime = cell.viewWithTag(4) as? UILabel
+        self.lblAudioName = cell.viewWithTag(2) as? UILabel
+        self.imgAudio = cell.viewWithTag(3) as? UIImageView
+        self.updateView()
+        
+        return cell
+    }
+    
 }
